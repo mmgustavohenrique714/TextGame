@@ -4,6 +4,7 @@ public class jogo {
 
     static Scanner sc = new Scanner(System.in);
     static ArrayList<String> cmdsMAPA = new ArrayList<>();
+    static ArrayList<String> inventario = new ArrayList<>();
 
     static String nome = "";
     static String genero = "";
@@ -28,6 +29,7 @@ public class jogo {
     static String Elu;
     static String Delu;
     static String Aquelu;
+    static String pirralhu;
     // 
 
 
@@ -114,6 +116,7 @@ public class jogo {
             Elu = "Ele";
             Delu = "Dele";
             Aquelu = "Aquele";
+            pirralhu = "pirralho";
 
         } else {
 
@@ -125,6 +128,7 @@ public class jogo {
             Elu = "Ela";
             Delu = "Dela";
             Aquelu = "Aquela";
+            pirralhu = "pirralha";
 
         }
 
@@ -176,6 +180,7 @@ public class jogo {
 
         do {
 
+            mostrarCMDS();
             System.out.print("Escolha: ");
 
             while (!sc.hasNextInt()) {
@@ -192,11 +197,17 @@ public class jogo {
                 printTEXTO("Escolha precisa ser entre :");
             }
 
-        } while (escolha < 1 || escolha > 2);
+        } while (escolha < De || escolha > Até);
         
     }
     
-
+    public static void limparTela(int ui) {
+        for (int i = 0; i < ui; i++) {
+            System.out.println(".");
+            wait(30);
+        }
+        System.out.println();
+    }
 
 
 
@@ -215,16 +226,31 @@ public class jogo {
         cmdsMAPA.add("Conversar");
         cmdsMAPA.add("Sair...");
 
-        mostrarCMDS();
         verificarNumeroESCOLHA(1, 2);
 
         cmdsMAPA.clear();
 
+        limparTela(10);
+
         switch (escolha) {
     
             case 1 -> {
-                conversaComCarlos();
+
+                cmdsMAPA.add("Conversar com carlos");
+                cmdsMAPA.add("Conversar com Roberta");
+
+                verificarNumeroESCOLHA(1, 2);
+
+                cmdsMAPA.clear();
+
+                wait(500);
+                switch (escolha) {
+                    case 1 -> conversaComCarlos();
+                    case 2 -> conversaComRoberta();
+                }
+
             }
+            case 2 -> System.out.println("Saindo..."); //sla();
     
         }   
     }
@@ -242,15 +268,18 @@ public class jogo {
     
     public static void conversaComCarlos() {
 
+        limparTela(30);
+
         printTEXTO("Voce vai ate o banco");
-       // wait(2000);
+        wait(1500);
         printTEXTO("(Sentando no banco)");
-       // wait(2000);
+        wait(1500);
         
         
 
         if (isDoneA == true) {
             msg("Carlos", "EAE MEU MN, DBOA?");
+            escolha = 0;
         } else {
             System.out.println(missaoAA);
             if (missaoAA == true) {
@@ -260,14 +289,11 @@ public class jogo {
                 cmdsMAPA.add("ir");
                 cmdsMAPA.add("nope");
 
-                mostrarCMDS();
+
                 verificarNumeroESCOLHA(1, 2);
 
                 cmdsMAPA.clear();
 
-            } else {
-                //pro carlos n precisa pois ele é a primeira missao
-                printTEXTO("Aquelu");
             }
         }
         
@@ -278,22 +304,106 @@ public class jogo {
             case 1 -> {
                 printTEXTO("Missao concluida pra fins de teste(n existe)");
                 wait(2000);
-                //missao do carlos
-                if (escolha == 1) {
-                    isDoneA = true;
-                    mapa(false, true, false);
-                }
-                // todo esse if faz parte do metodo DA MISSAO DO CARLOS
+
+                isDoneA = true;
+                limparTela(30);
+                mapa(false, true, false);
+
             }
             case 2 -> {
-                printTEXTO("Missao ainda n existe ent voltando...");
+
+                printTEXTO("tudo bem, n lhe obrigarei");
                 wait(1500);
+                limparTela(30);
+                bar();
+            }
+            case 0 -> {
+                printTEXTO("é o voltas...");
+                wait(1500);
+                limparTela(30);
                 bar();
             }
         }
     }
     
-    
+    public static void conversaComRoberta() {
+
+        limparTela(30);
+
+        printTEXTO("(Andando até roberta)");
+        wait(1500);
+        msg(nome, "Ola, me ve uma breja ae fia, pls");
+        wait(1500);
+        msg("Roberta", "Qual?");
+        wait(300);
+
+        cmdsMAPA.add("Skoll");
+        cmdsMAPA.add("Brama");
+        cmdsMAPA.add("Itaipava");
+
+        verificarNumeroESCOLHA(1, 3);
+
+        cmdsMAPA.clear();
+        
+        if (escolha == 1) {
+            printTEXTO("Skoll adicionada ao inventario");
+            inventario.add("Skoll");
+        } else if (escolha == 2) {
+            printTEXTO("Brama adicionada ao inventario");
+            inventario.add("Brama");
+        } else if (escolha == 3) {
+            printTEXTO("Itaipava adicionada ao inventario");
+            inventario.add("Itaipava");
+        }
+
+        wait(1500);
+        if (isDoneB == true) {
+
+            msg("Roberta", "não aguento mais te ver, " + pirralhu);
+            wait(2000);
+
+            limparTela(30);
+            bar();
+
+        } else {
+            if (missaoBB == true) {
+                msg("Roberta", "Vai pros confins bla bla bla");
+
+                cmdsMAPA.add("ir");
+                cmdsMAPA.add("não ir");
+
+                verificarNumeroESCOLHA(1, 2);
+
+                cmdsMAPA.clear();
+
+                switch (escolha) {
+
+                    case 1 -> {
+                        printTEXTO("Missao ainda n existe mas vamos supor que vc ja finalizou");
+                        wait(1000);
+                        isDoneB = true;
+                        limparTela(30);
+                        mapa(false, false, true);
+                    }
+                    case 2 -> {
+                        msg("Roberta", "Tudo bem, n é para todos");
+                        wait(1500);
+                        limparTela(30);
+                        bar();
+                    }
+
+                }
+
+            } else {
+                printTEXTO("(A observa)");
+                wait(1670);
+                msg("Roberta", "Ta olhando oque? vai embora");
+                wait(1500);
+                limparTela(30);
+                bar();
+            }
+        }
+    }
     
 
 
@@ -330,10 +440,9 @@ public class jogo {
         System.out.print("RPG");
         linhasln(50);
         
-        //pegarNOMEeGENERO();
-        //mudarPronomes();
+        pegarNOMEeGENERO();
+        mudarPronomes();
 
-        //SUPOSTAmissaoinicial();
         mapa(true, false, false);
 
     }
