@@ -10,6 +10,9 @@ public class jogo {
     static String genero = "";
     static int escolha = 67;
 
+    static int opcTamanho;
+
+    //missoes
     static boolean missaoAA;
     static boolean isDoneA = false;
 
@@ -176,7 +179,7 @@ public class jogo {
 
     }
     
-    public static void verificarNumeroESCOLHA(int De, int Até) {
+    public static void verificarNumeroESCOLHA() {
 
         do {
 
@@ -193,11 +196,11 @@ public class jogo {
             escolha = sc.nextInt();
             sc.nextLine();
 
-            if (escolha < De || escolha > Até) {
+            if (escolha < 1 || escolha > opcTamanho) {
                 printTEXTO("Escolha precisa ser entre :");
             }
 
-        } while (escolha < De || escolha > Até);
+        } while (escolha < 1 || escolha > opcTamanho);
         
     }
     
@@ -209,7 +212,20 @@ public class jogo {
         System.out.println();
     }
 
+    public static int CATCHescolha(String... opcoes) {
 
+        for (int i = 0; i < opcoes.length; i++ ) {
+            cmdsMAPA.add(opcoes[i]);
+        }
+
+        opcTamanho = opcoes.length;
+        verificarNumeroESCOLHA();
+
+        cmdsMAPA.clear();
+
+        return escolha;
+
+    }
 
 
 
@@ -223,12 +239,7 @@ public class jogo {
         System.out.println("Carlos (No banco)");
         System.out.println("Roberta (Atentende)");
     
-        cmdsMAPA.add("Conversar");
-        cmdsMAPA.add("Sair...");
-
-        verificarNumeroESCOLHA(1, 2);
-
-        cmdsMAPA.clear();
+        CATCHescolha("Conversar", "Sair");
 
         limparTela(10);
 
@@ -236,12 +247,7 @@ public class jogo {
     
             case 1 -> {
 
-                cmdsMAPA.add("Conversar com carlos");
-                cmdsMAPA.add("Conversar com Roberta");
-
-                verificarNumeroESCOLHA(1, 2);
-
-                cmdsMAPA.clear();
+                CATCHescolha("Conversar com carlos", "Conversar com Roberta");
 
                 wait(500);
                 switch (escolha) {
@@ -281,51 +287,141 @@ public class jogo {
             msg("Carlos", "EAE MEU MN, DBOA?");
             escolha = 0;
         } else {
-            System.out.println(missaoAA);
             if (missaoAA == true) {
 
-                System.err.println("vai pa missao.");
+                msg("Carlos", "Oi, você é novo por aqui");
+                wait(1100);
+                msg("Carlos", "De onde você é?");
 
-                cmdsMAPA.add("ir");
-                cmdsMAPA.add("nope");
+                CATCHescolha("Curitiba (mentira)", "Londrina (verdade)");
 
-
-                verificarNumeroESCOLHA(1, 2);
-
-                cmdsMAPA.clear();
+                switch (escolha) {
+                    case 1 -> DcarlosR1();
+                    case 2 -> DcarlosR2();
+                    case 0 -> {
+                        printTEXTO("Conversa vem Conversa vai");
+                        wait(1500);
+                        limparTela(25);
+                        bar();
+                    }
+                }
 
             }
         }
         
 
 
+        
+        }
+
+    public static void DcarlosR1() {
+        msg("Carlos", "Legal cara, eu nasci lá");
+        wait(1200);
+        msg("Carlos", "Você morava la quando voce tinha quantos anos?");
+
+        CATCHescolha("2 anos(Mentira)", "67 anos(Verdade)");
+
 
         switch (escolha) {
-            case 1 -> {
-                printTEXTO("Missao concluida pra fins de teste(n existe)");
-                wait(2000);
+            case 1 -> DcarlosR3();
+            case 2 -> DcarlosR4();
+        }
 
+    }
+    public static void DcarlosR2() {
+        msg("Carlos", "legal");
+        wait(1200);
+        printTEXTO("um pouco pensativo...");
+        wait(300);
+        msg("Carlos", "MAS que legal cara, eu amo Londrina, um youtuber que eu gosto mt mora la sabia?");
+        wait(2200);
+
+        CATCHescolha("Qual?", "João Caetano? amo os videos dele");
+
+        switch (escolha) {
+            case 1 -> DcarlosR5();
+            case 2 -> DcarlosR6();
+        }
+    }
+    public static void DcarlosR3() {
+        msg(nome, "moro la ah 2 anos...");
+        wait(1000);
+        printTEXTO("Carlos te observa atentamente");
+        wait(3000);
+        msg("Carlos", "N tema filho, isso só distancia as pessoas");
+        wait(2000);
+        bar();
+    }
+    public static void DcarlosR4() {
+        msg("Carlos", "hm... esta confuso n esta?");
+        wait(1500);
+        msg("Carlos", "Quer encontrar paz?");
+        wait(1500);
+        
+        CATCHescolha("(fazer sim com a cabeça)", "Só preciso pensar");
+        
+        switch (escolha) {
+            case 1 -> {
+                msg("Carlos", "(da missao)");
+                wait(1500);
+
+                //missaodocarlos();     // n existe
+                printTEXTO("missao concluida pra fins de teste");
                 isDoneA = true;
-                limparTela(30);
+                wait(1000);
                 mapa(false, true, false);
 
             }
             case 2 -> {
-
-                printTEXTO("tudo bem, n lhe obrigarei");
+                msg("Carlos", "Pense, me procure se necessario");
                 wait(1500);
-                limparTela(30);
-                bar();
-            }
-            case 0 -> {
-                printTEXTO("é o voltas...");
-                wait(1500);
-                limparTela(30);
                 bar();
             }
         }
     }
-    
+    public static void DcarlosR5() {
+        msg(nome, "Qual?");
+        wait(1200);
+        msg("Carlos", "Joao Caetano, é um youtuber que eu via antes, mas agr tenho que fazer um trabalho aq. flw.");
+        wait(3000);
+        bar();
+    }
+    public static void DcarlosR6() {
+        msg("Carlos", "MANO VOCE TAMBEM ASSISTE? AAAAAAA");
+        wait(1500);
+        limparTela(3);
+        wait(2000);
+        printTEXTO("Conversa desenvolve...");
+        wait(2000);
+        printTEXTO("Carlos te convida pra uma missao...");
+        wait(2000);
+        CATCHescolha("Ir", "Não ir");
+
+        switch (escolha) {
+            case 1 -> {
+                msg("Carlos", "Foi um prazer te conhecer, vá");
+                wait(5000);
+
+                //missaodocarlos();     // n existe
+                printTEXTO("missao concluida pra fins de teste");
+                isDoneA = true;
+                wait(1000);
+                mapa(false, true, false);
+
+            }
+            case 2 -> {
+                msg("Carlos", "Tudo bem meu mn, n é pra todos");
+                wait(1500);
+                bar();
+            }
+        }
+    }
+
+
+
+
+
+
     public static void conversaComRoberta() {
 
         limparTela(30);
@@ -337,13 +433,7 @@ public class jogo {
         msg("Roberta", "Qual?");
         wait(300);
 
-        cmdsMAPA.add("Skoll");
-        cmdsMAPA.add("Brama");
-        cmdsMAPA.add("Itaipava");
-
-        verificarNumeroESCOLHA(1, 3);
-
-        cmdsMAPA.clear();
+        CATCHescolha("Skoll", "Brama", "Itaipava");
         
         if (escolha == 1) {
             printTEXTO("Skoll adicionada ao inventario");
@@ -369,12 +459,7 @@ public class jogo {
             if (missaoBB == true) {
                 msg("Roberta", "Vai pros confins bla bla bla");
 
-                cmdsMAPA.add("ir");
-                cmdsMAPA.add("não ir");
-
-                verificarNumeroESCOLHA(1, 2);
-
-                cmdsMAPA.clear();
+                CATCHescolha("ir", "nao ir");
 
                 switch (escolha) {
 
@@ -405,7 +490,7 @@ public class jogo {
         }
     }
     
-
+    // n tem dialogos completos
 
 
 
@@ -440,8 +525,8 @@ public class jogo {
         System.out.print("RPG");
         linhasln(50);
         
-        pegarNOMEeGENERO();
-        mudarPronomes();
+        //pegarNOMEeGENERO();
+        //mudarPronomes();
 
         mapa(true, false, false);
 
