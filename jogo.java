@@ -5,10 +5,13 @@ public class jogo {
     static Scanner sc = new Scanner(System.in);
     static ArrayList<String> cmdsMAPA = new ArrayList<>();
     static ArrayList<String> inventario = new ArrayList<>();
+    static String[] opcoesJOG = {"Status", "Inventario"};
 
     static String nome = "";
     static String genero = "";
     static int escolha = 67;
+    static boolean ishaveOPJOGG;
+    static String lugarAtual = "";
 
     static int opcTamanho;
 
@@ -176,31 +179,57 @@ public class jogo {
             System.out.println("[" + (i + 1) + "] " + cmdsMAPA.get(i));
         }
         linhasln(50);
+        if (ishaveOPJOGG == true) {
+            System.out.println("[" + (cmdsMAPA.size() + 1) + "] Opções do jogador");
+            linhasln(50);
+        }
 
     }
     
     public static void verificarNumeroESCOLHA() {
-
-        do {
-
-            mostrarCMDS();
-            System.out.print("Escolha: ");
-
-            while (!sc.hasNextInt()) {
-                System.out.println("Precisa ser número");
-                System.out.println("Tente novamente");
+        if (ishaveOPJOGG == true) {
+            do {
+    
+                mostrarCMDS();
                 System.out.print("Escolha: ");
-                sc.next();
-            }
+    
+                while (!sc.hasNextInt()) {
+                    System.out.println("Precisa ser número");
+                    System.out.println("Tente novamente");
+                    System.out.print("Escolha: ");
+                    sc.next();
+                }
+    
+                escolha = sc.nextInt();
+                sc.nextLine();
+    
+                if (escolha < 1 || escolha > opcTamanho+1) {
+                    printTEXTO("Escolha precisa ser entre :");
+                }
+            } while (escolha < 1 || escolha > opcTamanho+1);
 
-            escolha = sc.nextInt();
-            sc.nextLine();
-
-            if (escolha < 1 || escolha > opcTamanho) {
-                printTEXTO("Escolha precisa ser entre :");
-            }
-
-        } while (escolha < 1 || escolha > opcTamanho);
+        } else {
+            do {
+    
+                mostrarCMDS();
+                System.out.print("Escolha: ");
+    
+                while (!sc.hasNextInt()) {
+                    System.out.println("Precisa ser número");
+                    System.out.println("Tente novamente");
+                    System.out.print("Escolha: ");
+                    sc.next();
+                }
+    
+                escolha = sc.nextInt();
+                sc.nextLine();
+    
+                if (escolha < 1 || escolha > opcTamanho) {
+                    printTEXTO("Escolha precisa ser entre :");
+                }
+    
+            } while (escolha < 1 || escolha > opcTamanho);
+        }
         
     }
     
@@ -212,8 +241,8 @@ public class jogo {
         System.out.println();
     }
 
-    public static int CATCHescolha(String... opcoes) {
-
+    public static int CATCHescolha(boolean ishaveOPJOG, String... opcoes) {
+        ishaveOPJOGG = ishaveOPJOG;
         for (int i = 0; i < opcoes.length; i++ ) {
             cmdsMAPA.add(opcoes[i]);
         }
@@ -226,7 +255,52 @@ public class jogo {
         return escolha;
 
     }
+    public static void lugarAtual() {
+        limparTela(20);
+        switch (lugarAtual) {
+            case "Bar" -> bar();
+        }
+    }
+    static public void Status() {
 
+    }
+    static public void Inventario() {
+
+    }
+    static public void opcoesProJogador() {
+        linhasln(30);
+        for (int i = 0; i < opcoesJOG.length; i++) {
+            System.out.println("[" + (i + 1) + "] " + opcoesJOG[i]);
+        }
+        linhasln(30);
+        System.out.println("[" + (opcoesJOG.length + 1) + "] Sair");
+        linhasln(30);
+
+        do {
+            while (!sc.hasNextInt()) {
+                System.out.println("Precisa ser número");
+                System.out.println("Tente novamente");
+                System.out.print("Escolha: ");
+                sc.next();
+            }
+
+            escolha = sc.nextInt();
+            sc.nextLine();
+
+            if (escolha < 1 || escolha > opcoesJOG.length + 1) {
+                printTEXTO("Escolha precisa ser entre :");
+            }
+
+        } while (escolha < 1 || escolha > opcoesJOG.length + 1);
+
+        switch (escolha) {
+
+            case 1 -> Status();
+            case 2 -> Inventario();
+           
+            default -> lugarAtual();
+        }
+    }
 
 
 
@@ -235,11 +309,11 @@ public class jogo {
     //lugares
     
     public static void bar() {
+        lugarAtual = "Bar";
         System.out.println("-----BAR-----");
         System.out.println("Carlos (No banco)");
         System.out.println("Roberta (Atentende)");
-    
-        CATCHescolha("Conversar", "Sair");
+        CATCHescolha(true, "Conversar", "Sair");
 
         limparTela(10);
 
@@ -247,17 +321,21 @@ public class jogo {
     
             case 1 -> {
 
-                CATCHescolha("Conversar com carlos", "Conversar com Roberta");
+                CATCHescolha(false, "Conversar com carlos", "Conversar com Roberta", "Sair");
 
                 wait(500);
                 switch (escolha) {
                     case 1 -> conversaComCarlos();
                     case 2 -> conversaComRoberta();
+                    case 3 -> {
+                        limparTela(10);
+                        bar();
+                    }
                 }
 
             }
             case 2 -> System.out.println("Saindo..."); //sla();
-    
+            default -> opcoesProJogador();
         }   
     }
 
@@ -293,7 +371,7 @@ public class jogo {
                 wait(1100);
                 msg("Carlos", "De onde você é?");
 
-                CATCHescolha("Curitiba (mentira)", "Londrina (verdade)");
+                CATCHescolha(false, "Curitiba (mentira)", "Londrina (verdade)");
 
                 switch (escolha) {
                     case 1 -> DcarlosR1();
@@ -319,7 +397,7 @@ public class jogo {
         wait(1200);
         msg("Carlos", "Você morava la quando voce tinha quantos anos?");
 
-        CATCHescolha("2 anos(Mentira)", "67 anos(Verdade)");
+        CATCHescolha(false, "2 anos(Mentira)", "67 anos(Verdade)");
 
 
         switch (escolha) {
@@ -336,7 +414,7 @@ public class jogo {
         msg("Carlos", "MAS que legal cara, eu amo Londrina, um youtuber que eu gosto mt mora la sabia?");
         wait(2200);
 
-        CATCHescolha("Qual?", "João Caetano? amo os videos dele");
+        CATCHescolha(false, "Qual?", "João Caetano? amo os videos dele");
 
         switch (escolha) {
             case 1 -> DcarlosR5();
@@ -358,7 +436,7 @@ public class jogo {
         msg("Carlos", "Quer encontrar paz?");
         wait(1500);
         
-        CATCHescolha("(fazer sim com a cabeça)", "Só preciso pensar");
+        CATCHescolha(false, "(fazer sim com a cabeça)", "Só preciso pensar");
         
         switch (escolha) {
             case 1 -> {
@@ -395,7 +473,7 @@ public class jogo {
         wait(2000);
         printTEXTO("Carlos te convida pra uma missao...");
         wait(2000);
-        CATCHescolha("Ir", "Não ir");
+        CATCHescolha(false, "Ir", "Não ir");
 
         switch (escolha) {
             case 1 -> {
@@ -433,7 +511,7 @@ public class jogo {
         msg("Roberta", "Qual?");
         wait(300);
 
-        CATCHescolha("Skoll", "Brama", "Itaipava");
+        CATCHescolha(false, "Skoll", "Brama", "Itaipava");
         
         if (escolha == 1) {
             printTEXTO("Skoll adicionada ao inventario");
@@ -459,7 +537,7 @@ public class jogo {
             if (missaoBB == true) {
                 msg("Roberta", "Vai pros confins bla bla bla");
 
-                CATCHescolha("ir", "nao ir");
+                CATCHescolha(false, "ir", "nao ir");
 
                 switch (escolha) {
 
