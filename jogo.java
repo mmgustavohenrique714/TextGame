@@ -12,6 +12,10 @@ public class jogo {
     static int escolha = 67;
     static boolean ishaveOPJOGG;
     static String lugarAtual = "";
+    static int JogadorVida = 100;
+    static int JogadorForça = 30;
+    static int pontos = 0;
+    static int escolhaStatus = 0;
 
     static int opcTamanho;
 
@@ -262,9 +266,86 @@ public class jogo {
         }
     }
     static public void Status() {
+        linhasln(30);
+        printTEXTO("VIDA : " + JogadorVida);
+        printTEXTO("Força : " + JogadorForça);
+        linhasln(30);
+        printTEXTO("pontos : " + pontos);
+        System.out.println();
+        System.out.println("Colocar pontos?");
+        CATCHescolha(false, "Sim", "Não");
 
+        if (pontos == 0) {
+            printTEXTO("Você não tem pontos");
+            wait(1000);
+            opcoesProJogador();
+        } else {
+            switch (escolha) {
+                case 1 -> {
+                    do {
+
+                        System.out.print("Adicionar Quantos pontos? : ");
+    
+                        while (!sc.hasNextInt()) {
+                            System.out.println("Precisa ser numero.");
+                            System.out.println("Tente novamente.");
+                            System.out.print("Adicionar Quantos pontos? (Disponivel: " + pontos + ") : ");
+                        }
+                        escolhaStatus = sc.nextInt();
+
+                        if (escolhaStatus < 1 || escolhaStatus > pontos) {
+                            System.out.println("Precisa estar entre 1 e " + pontos);
+                        }
+                    } while (escolhaStatus < 1 || escolhaStatus > pontos);
+                    
+                    System.out.println("Adicionar " + escolha + " pontos em :");
+                    CATCHescolha(false, "Vida", "Força");
+
+                    switch (escolha) {
+                        case 1 -> {
+                            JogadorVida = JogadorVida + escolhaStatus;
+                            pontos = pontos - escolhaStatus;
+                            System.out.println(escolhaStatus + " Pontos adicionados a Vida");
+                            wait(750);
+                            printTEXTO("Voltando...");
+                            opcoesProJogador();
+                        }
+                        case 2 -> {
+                            JogadorForça = JogadorVida + escolhaStatus;
+                            pontos = pontos - escolhaStatus;
+                            System.out.println(escolhaStatus + " Pontos adicionados a Vida");
+                            wait(750);
+                            printTEXTO("Voltando...");
+                            opcoesProJogador();
+                        }
+                    }
+                }
+                case 2 -> {
+                    printTEXTO("Voltando...");
+                    wait(1000);
+                    opcoesProJogador();
+                }
+            }
+        }
     }
     static public void Inventario() {
+        if (inventario.isEmpty()) {
+            printTEXTO("Inventario vazio");
+            wait(700);
+            limparTela(10);
+            opcoesProJogador();
+        } else {
+            linhasln(50);
+            for (int i = 0; i < inventario.size(); i++) {
+                System.out.println("[" + (i + 1) + "] " + inventario.get(i));
+            }
+            System.out.print("Mande Qualquer coisa pra sair :");
+            sc.nextLine();
+            String escolhaString = sc.nextLine();
+            switch (escolhaString) {
+                default -> opcoesProJogador();
+            }
+        }
 
     }
     static public void opcoesProJogador() {
@@ -363,7 +444,9 @@ public class jogo {
 
         if (isDoneA == true) {
             msg("Carlos", "EAE MEU MN, DBOA?");
-            escolha = 0;
+            wait(1100);
+            printTEXTO("vai voltar pro bar pq vc tecnicamente ja concluiu a missao dele");
+            bar();
         } else {
             if (missaoAA == true) {
 
@@ -428,7 +511,7 @@ public class jogo {
         wait(3000);
         msg("Carlos", "N tema filho, isso só distancia as pessoas");
         wait(2000);
-        bar();
+        lugarAtual();
     }
     public static void DcarlosR4() {
         msg("Carlos", "hm... esta confuso n esta?");
@@ -453,7 +536,7 @@ public class jogo {
             case 2 -> {
                 msg("Carlos", "Pense, me procure se necessario");
                 wait(1500);
-                bar();
+                lugarAtual();
             }
         }
     }
@@ -462,7 +545,7 @@ public class jogo {
         wait(1200);
         msg("Carlos", "Joao Caetano, é um youtuber que eu via antes, mas agr tenho que fazer um trabalho aq. flw.");
         wait(3000);
-        bar();
+        lugarAtual();
     }
     public static void DcarlosR6() {
         msg("Carlos", "MANO VOCE TAMBEM ASSISTE? AAAAAAA");
@@ -484,13 +567,15 @@ public class jogo {
                 printTEXTO("missao concluida pra fins de teste");
                 isDoneA = true;
                 wait(1000);
+                printTEXTO("30 Pontos adiciondos.");
+                pontos = pontos + 30;
                 mapa(false, true, false);
 
             }
             case 2 -> {
                 msg("Carlos", "Tudo bem meu mn, n é pra todos");
                 wait(1500);
-                bar();
+                lugarAtual();
             }
         }
     }
@@ -531,7 +616,7 @@ public class jogo {
             wait(2000);
 
             limparTela(30);
-            bar();
+            lugarAtual();
 
         } else {
             if (missaoBB == true) {
@@ -552,7 +637,7 @@ public class jogo {
                         msg("Roberta", "Tudo bem, n é para todos");
                         wait(1500);
                         limparTela(30);
-                        bar();
+                        lugarAtual();
                     }
 
                 }
@@ -563,7 +648,7 @@ public class jogo {
                 msg("Roberta", "Ta olhando oque? vai embora");
                 wait(1500);
                 limparTela(30);
-                bar();
+                lugarAtual();
             }
         }
     }
@@ -603,8 +688,8 @@ public class jogo {
         System.out.print("RPG");
         linhasln(50);
         
-        //pegarNOMEeGENERO();
-        //mudarPronomes();
+        pegarNOMEeGENERO();
+        mudarPronomes();
 
         mapa(true, false, false);
 
